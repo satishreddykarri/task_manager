@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'taskscreen.dart';
 import 'loginpage.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class ProfileScreen extends StatelessWidget {
   final String? name;
@@ -26,14 +27,16 @@ class ProfileScreen extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: const Color(0xFFE3F2FD),
-
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(20),
-
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
+        child: Center(
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: Padding(
+              padding: const EdgeInsets.all(20),
+              child: SingleChildScrollView(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
               /// Header
               Row(
                 children: [
@@ -64,7 +67,7 @@ class ProfileScreen extends StatelessWidget {
                     color: Colors.white,
                   ),
                 ),
-              ),
+              ).animate().scale(duration: 500.ms, curve: Curves.easeOutBack),
 
               const SizedBox(height: 30),
 
@@ -72,21 +75,21 @@ class ProfileScreen extends StatelessWidget {
               Text(
                 "Name: $name",
                 style: GoogleFonts.luxuriousRoman(fontSize: 18),
-              ),
+              ).animate().fade(delay: 200.ms).slideX(begin: -0.1, end: 0),
 
               const SizedBox(height: 10),
 
               Text(
                 "Email: $email",
                 style: GoogleFonts.luxuriousRoman(fontSize: 18),
-              ),
+              ).animate().fade(delay: 300.ms).slideX(begin: -0.1, end: 0),
 
               const SizedBox(height: 10),
 
               Text(
                 "Mobile: $mobile",
                 style: GoogleFonts.luxuriousRoman(fontSize: 18),
-              ),
+              ).animate().fade(delay: 400.ms).slideX(begin: -0.1, end: 0),
 
               const SizedBox(height: 30),
 
@@ -97,21 +100,21 @@ class ProfileScreen extends StatelessWidget {
                   fontSize: 22,
                   fontWeight: FontWeight.bold,
                 ),
-              ),
+              ).animate().fade(delay: 500.ms).slideX(begin: -0.1, end: 0),
 
               const SizedBox(height: 15),
 
               Text(
                 "Completed Tasks: $completedTasks",
                 style: GoogleFonts.luxuriousRoman(fontSize: 18),
-              ),
+              ).animate().fade(delay: 600.ms).slideX(begin: -0.1, end: 0),
 
               const SizedBox(height: 10),
 
               Text(
                 "Incomplete Tasks: $incompleteTasks",
                 style: GoogleFonts.luxuriousRoman(fontSize: 18),
-              ),
+              ).animate().fade(delay: 700.ms).slideX(begin: -0.1, end: 0),
 
               const SizedBox(height: 40),
 
@@ -151,6 +154,9 @@ class ProfileScreen extends StatelessWidget {
             ],
           ),
         ),
+      ),
+      ),
+      ),
       ),
     );
   }

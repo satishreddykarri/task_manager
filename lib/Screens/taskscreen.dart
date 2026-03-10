@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:task_manager/Screens/profilescreen.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 
 class Task {
   String id;
@@ -238,22 +239,30 @@ class _TaskScreenState extends State<TaskScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   /// Logo + App Name
-                  Row(
-                    children: [
-                      Image.asset("assets/logo.png", height: 40, width: 40),
-
-                      const SizedBox(width: 8),
-
-                      Text(
-                        "TaskFlow",
-                        style: GoogleFonts.luxuriousRoman(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
+                  Flexible(
+                    child: Row(
+                      children: [
+                        Image.asset("assets/logo.png", height: 40, width: 40)
+                            .animate()
+                            .fade(duration: 400.ms)
+                            .scale(delay: 100.ms),
+        
+                        const SizedBox(width: 8),
+        
+                        Flexible(
+                          child: Text(
+                            "TaskFlow",
+                            style: GoogleFonts.luxuriousRoman(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ).animate().fade(duration: 500.ms, delay: 200.ms).slideX(begin: -0.2, end: 0),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-
+        
                   /// Profile Icon
                   IconButton(
                     icon: const Icon(
@@ -264,8 +273,8 @@ class _TaskScreenState extends State<TaskScreen> {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
-                          builder: (context) {
+                        PageRouteBuilder(
+                          pageBuilder: (context, animation, secondaryAnimation) {
                             final user = Supabase.instance.client.auth.currentUser;
                             final metadata = user?.userMetadata ?? {};
                             
@@ -276,10 +285,13 @@ class _TaskScreenState extends State<TaskScreen> {
                                   tasks: tasks,
                                 );
                           },
+                          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+                            return FadeTransition(opacity: animation, child: child);
+                          },
                         ),
                       );
                     },
-                  ),
+                  ).animate().fade(duration: 400.ms).scale(delay: 300.ms),
                 ],
               ),
               const SizedBox(height: 30),
@@ -346,6 +358,9 @@ class _TaskScreenState extends State<TaskScreen> {
                                       tasks[index].isDone
                                           ? TextDecoration.lineThrough
                                           : null,
+                                  color: tasks[index].isDone 
+                                          ? Colors.grey 
+                                          : Colors.black,
                                 ),
                               ),
 
@@ -354,14 +369,14 @@ class _TaskScreenState extends State<TaskScreen> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   IconButton(
-                                    icon: const Icon(Icons.edit),
+                                    icon: const Icon(Icons.edit, color: Colors.blueGrey),
                                     onPressed: () {
                                       showEditTaskDialog(index);
                                     },
                                   ),
 
                                   IconButton(
-                                    icon: const Icon(Icons.delete),
+                                    icon: const Icon(Icons.delete, color: Colors.redAccent),
                                     onPressed: () {
                                       deleteTask(index);
                                     },
@@ -369,7 +384,9 @@ class _TaskScreenState extends State<TaskScreen> {
                                 ],
                               ),
                             ),
-                          );
+                          ).animate()
+                           .fade(duration: 400.ms, delay: (index * 100).ms)
+                           .slideY(begin: 0.2, end: 0, curve: Curves.easeOut);
                         },
                       ),
               ),
